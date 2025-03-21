@@ -16,6 +16,28 @@ class RidePreference {
       required this.arrival,
       required this.requestedSeats});
 
+  // RidePreference.copy(RidePreference other)
+  //     : arrival = other.arrival,
+  //       departure = other.departure,
+  //       departureDate = other.departureDate,
+  //       requestedSeats = other.requestedSeats;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is RidePreference &&
+        other.arrival == arrival &&
+        other.departure == departure &&
+        other.departureDate == departureDate &&
+        other.requestedSeats == requestedSeats;
+  }
+
+  @override
+  int get hashCode =>
+      arrival.hashCode ^
+      departure.hashCode ^
+      departureDate.hashCode ^
+      requestedSeats.hashCode;
   @override
   String toString() {
     return 'RidePref(departure: ${departure.name}, '
