@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/ui/provider/async_value.dart';
 import 'package:week_3_blabla_project/ui/provider/ride_pref_provider.dart';
 import '../../../model/ride/ride_pref.dart';
 import '../../theme/theme.dart';
@@ -36,18 +37,22 @@ class RidePrefScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RidePreference? currentRidePreference =
-        context.watch<RidesPreferencesProvider>().currentPreference;
-    List<RidePreference> pastPreferences =
-        context.watch<RidesPreferencesProvider>().preferencesHistory;
+    final provider = context.watch<RidesPreferencesProvider>();
+    final currentRidePreference = provider.currentPreference;
+    final pastPreferences = provider.pastPreferences;
 
-    return Stack(
-      children: [
-        // 1 - Background Image
-        BlaBackground(),
+    Widget content;
 
-        // 2 - Foreground content
-        Column(
+    switch (pastPreferences.state) {
+      case AsyncValueState.loading:
+        content = const Center(child: Text('Loading...'));
+        break;
+      case AsyncValueState.error:
+        content = const Center(child: Text('No connection. Try later'));
+        break;
+      case AsyncValueState.success:
+        List<RidePreference> pastPref = pastPreferences.data!;
+        content = Column(
           children: [
             SizedBox(height: BlaSpacings.m),
             Text(
@@ -78,11 +83,11 @@ class RidePrefScreen extends StatelessWidget {
                     child: ListView.builder(
                       shrinkWrap: true, // Fix ListView height issue
                       physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: pastPreferences.length,
+                      itemCount: pastPref.length,
                       itemBuilder: (ctx, index) => RidePrefHistoryTile(
-                        ridePref: pastPreferences[index],
+                        ridePref: pastPref[index],
                         onPressed: () =>
-                            onRidePrefSelected(context, pastPreferences[index]),
+                            onRidePrefSelected(context, pastPref[index]),
                       ),
                     ),
                   ),
@@ -90,10 +95,24 @@ class RidePrefScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        );
+        break;
+      case AsyncValueState.empty:
+        content = const Center(child: Text('Fetching data failed, please try again'));
+        break;
+    }
+
+    return Stack(
+      children: [
+        // 1 - Background Image
+        const BlaBackground(),
+
+        // 2 - Foreground content
+        content,
       ],
     );
   }
+
 }
 
 class BlaBackground extends StatelessWidget {

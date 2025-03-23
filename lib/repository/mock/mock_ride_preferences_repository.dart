@@ -7,12 +7,14 @@ class MockRidePreferencesRepository extends RidePreferencesRepository {
   final List<RidePreference> _pastPreferences = fakeRidePrefs;
 
   @override
-  List<RidePreference> getPastPreferences() {
-    return _pastPreferences;
+  Future<List<RidePreference>> getPastPreferences() {
+    return Future.delayed(Duration(seconds: 5), () async {
+       return  _pastPreferences;
+    });
   }
 
   @override
-  void addPreference(RidePreference preference) {
+  Future<void> addPreference(RidePreference preference) async {
     _pastPreferences.add(preference);
   }
 }
