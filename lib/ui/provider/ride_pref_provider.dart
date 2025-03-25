@@ -21,13 +21,17 @@ class RidesPreferencesProvider extends ChangeNotifier {
     // Your code
     if (currentPreference != pref) {
       _currentPreference = pref;
+
+      addPreference(pref);
     }
     notifyListeners();
   }
 
   void addPreference(RidePreference pref) async {
     if (!pastPreferences.data!.contains(pref)) {
-      pastPreferences.data!.add(pref);
+      // remove the past if duplicate place is found
+      pastPreferences.data!.remove(pref);
+
       await repository.addPreference(pref);
     }
   }
@@ -37,6 +41,7 @@ class RidesPreferencesProvider extends ChangeNotifier {
     pastPreferences = AsyncValue.loading();
     notifyListeners();
     try {
+      
       // 2 Fetch data
       List<RidePreference> pastPrefs = await repository.getPastPreferences();
       // 3 Handle success

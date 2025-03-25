@@ -1,3 +1,4 @@
+
 import '../location/locations.dart';
 
 ///
@@ -45,4 +46,6 @@ class RidePreference {
         'arrival: ${arrival.name}, '
         'requestedSeats: $requestedSeats)';
   }
+
+
 }
