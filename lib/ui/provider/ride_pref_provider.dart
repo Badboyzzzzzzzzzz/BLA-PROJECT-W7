@@ -31,9 +31,12 @@ class RidesPreferencesProvider extends ChangeNotifier {
     if (!pastPreferences.data!.contains(pref)) {
       // remove the past if duplicate place is found
       pastPreferences.data!.remove(pref);
+      pastPreferences.data!.add(pref);
 
+      // update the list of past preferences
       await repository.addPreference(pref);
     }
+    notifyListeners();
   }
 
   Future<void> _fetchPastPreferences() async {
@@ -41,7 +44,6 @@ class RidesPreferencesProvider extends ChangeNotifier {
     pastPreferences = AsyncValue.loading();
     notifyListeners();
     try {
-      
       // 2 Fetch data
       List<RidePreference> pastPrefs = await repository.getPastPreferences();
       // 3 Handle success

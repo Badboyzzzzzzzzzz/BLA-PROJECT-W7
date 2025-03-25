@@ -31,7 +31,7 @@ class LocalRidePreferenceRepository extends RidePreferencesRepository {
     await prefs.setStringList(
       _preferencesKey,
       preferences
-          .map((pref) => jsonEncode(RidePreferenceDto(pref).toJson()))
+          .map((pref) => jsonEncode(RidePreferenceDto.toJson(pref)))
           .toList(),
     );
   }

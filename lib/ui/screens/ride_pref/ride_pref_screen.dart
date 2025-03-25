@@ -39,11 +39,11 @@ class RidePrefScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<RidesPreferencesProvider>();
     final currentRidePreference = provider.currentPreference;
-    final pastPreferences = provider.pastPreferences;
+    final pastPreference = provider.pastPreferences;
 
     Widget content;
 
-    switch (pastPreferences.state) {
+    switch (pastPreference.state) {
       case AsyncValueState.loading:
         content = const Center(child: Text('Loading...'));
         break;
@@ -51,7 +51,7 @@ class RidePrefScreen extends StatelessWidget {
         content = const Center(child: Text('No connection. Try later'));
         break;
       case AsyncValueState.success:
-        List<RidePreference> pastPref = pastPreferences.data!;
+        List<RidePreference> pastPref = provider.preferencesHistory;
         content = Column(
           children: [
             SizedBox(height: BlaSpacings.m),
@@ -98,7 +98,8 @@ class RidePrefScreen extends StatelessWidget {
         );
         break;
       case AsyncValueState.empty:
-        content = const Center(child: Text('Fetching data failed, please try again'));
+        content =
+            const Center(child: Text('Fetching data failed, please try again'));
         break;
     }
 
@@ -112,7 +113,6 @@ class RidePrefScreen extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class BlaBackground extends StatelessWidget {

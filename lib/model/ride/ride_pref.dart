@@ -1,4 +1,3 @@
-
 import '../location/locations.dart';
 
 ///
@@ -39,13 +38,4 @@ class RidePreference {
       departure.hashCode ^
       departureDate.hashCode ^
       requestedSeats.hashCode;
-  @override
-  String toString() {
-    return 'RidePref(departure: ${departure.name}, '
-        'departureDate: ${departureDate.toIso8601String()}, '
-        'arrival: ${arrival.name}, '
-        'requestedSeats: $requestedSeats)';
-  }
-
-
 }
